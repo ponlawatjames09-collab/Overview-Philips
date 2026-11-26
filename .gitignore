@@ -2,7 +2,12 @@ node_modules/
 build/
 dist/
 coverage/
+.vercel/
 .DS_Store
 *.log
 .env*
 !.env.example
+server.js
+
+# Exclude large raw PDF service manuals from GitHub/Vercel (PNG diagrams remain tracked)
+public/assets/aistudio/*.pdf

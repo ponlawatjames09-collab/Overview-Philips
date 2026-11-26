@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react';
 import {
   AlertTriangle,
+  Check,
+  Link2,
   Maximize2,
   Printer,
   ShieldCheck,
@@ -31,6 +33,7 @@ export default function App() {
   const [categoryFilter, setCategoryFilter] = useState<ComparisonCategory>('all');
   const [focusedModel, setFocusedModel] = useState<ModelId | 'all'>('all');
   const [failedImages, setFailedImages] = useState<Record<string, boolean>>({});
+  const [copiedLink, setCopiedLink] = useState<boolean>(false);
 
   const activeDiagram = ATTACHED_DIAGRAMS[selectedDiagramIdx] ?? ATTACHED_DIAGRAMS[0];
 
@@ -44,6 +47,16 @@ export default function App() {
 
   const handlePrint = () => {
     window.print();
+  };
+
+  const handleCopyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setCopiedLink(true);
+      window.setTimeout(() => setCopiedLink(false), 2000);
+    } catch {
+      setCopiedLink(false);
+    }
   };
 
   return (
@@ -87,7 +100,24 @@ export default function App() {
             </a>
           </nav>
 
-          <div className="flex items-center gap-3 shrink-0">
+          <div className="flex items-center gap-2.5 shrink-0">
+            <button
+              type="button"
+              onClick={handleCopyLink}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-blue-400/30 bg-[#0F2042] px-3 py-2 text-xs font-semibold text-blue-100 transition-colors hover:bg-[#173060] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-400 whitespace-nowrap shrink-0"
+            >
+              {copiedLink ? (
+                <>
+                  <Check className="h-3.5 w-3.5 text-emerald-300" />
+                  <span>คัดลอกลิงก์แล้ว</span>
+                </>
+              ) : (
+                <>
+                  <Link2 className="h-3.5 w-3.5 text-sky-300" />
+                  <span>คัดลอกลิงก์</span>
+                </>
+              )}
+            </button>
             <button
               type="button"
               onClick={handlePrint}
