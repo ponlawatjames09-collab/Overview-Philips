@@ -25,6 +25,14 @@ export default defineConfig(() => {
           if (fs.existsSync(distDir) && fs.existsSync(srcAssets)) {
             fs.cpSync(srcAssets, distAssets, {recursive: true, force: true});
           }
+          const distAistudio = path.resolve(distDir, 'assets/aistudio');
+          if (fs.existsSync(distAistudio)) {
+            for (const file of fs.readdirSync(distAistudio)) {
+              if (file.toLowerCase().endsWith('.pdf')) {
+                fs.rmSync(path.join(distAistudio, file), {force: true});
+              }
+            }
+          }
         },
       },
     ],
